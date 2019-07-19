@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home/datatable','DatatablesController@anyData')->name('datatables.data');
+Route::get('/home','DatatablesController@index')->name('datatables');
+Route::resource('user','UserController',['except' => ['delete']]);
+Route::get('/user/{id}','UserController@destroy')->name('user.destroy');
