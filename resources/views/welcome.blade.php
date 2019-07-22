@@ -12,7 +12,7 @@
 @section('content_header')
     <div class="col-md-3"><h1 style="margin-top: 0">Dashboard</h1></div>
     <div class="col-md-9">
-        <a  href="{{ route('user.create') }}" class="btn btn-primary" style="float: right;">New</a >
+        <button onclick="location.href='user/create'" type="button" class="btn btn-primary" style="float: right;">New</button>
     </div>
 
 @stop
@@ -47,10 +47,52 @@
                     { data: 'name', name: 'name' },
                     { data: 'email', name: 'email' },
                     { data: 'role_name', name: 'role'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                    {
+                        data: 'id',
+                        name: 'action',
+                        render: function (data) {
+                            var command = "";
+                            command += '<a href="user/'+data+'/edit" class="btn btn-primary btn-xs" ><span class="glyphicon glyphicon-pencil"></span></a> ' +
+                                    '<meta name="csrf-token" content="{{ csrf_token() }}">' +
+                                '<a href="user/'+data+'" class="btn btn-danger btn-xs delete"><span class="glyphicon glyphicon-trash"></span></a>'
+                            return command;
+                        }
+                    }
                 ]
 
             });
+        });
+        $(document).on('click', '.delete', function(){
+            var parentPost = $(this).closest('.post');
+
+            if(confirm("Are you sure you want to Delete this data?")) {
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    method: 'delete',
+                    url: $(this).attr('href'),
+                    success: function (data) {
+                        if (data == "delete success") {
+                            alert(data);
+                            location.reload();
+//                            parentPost.slideUp();
+                        } else {
+                            alert("Could not delete data");
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+            else
+            {
+                return false;
+            }
         });
     </script>
 @stop

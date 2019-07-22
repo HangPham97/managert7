@@ -92,15 +92,19 @@ class UserController extends Controller
     public function update(UpdateUser $request, $id)
     {
 
-        $validator = $request->validated();
+//        $request->validated();
 //        dd($validator);
 //        if ($validator->fails()) {
 //            return redirect()->back()
 //                ->withErrors($validator)
 //                ->withInput();
 //        } else {
+            if($request->get('password') == ""){
+                User::where('id', $id)->update($request->except(['_token','_method','password','password_confirmation']));
+            } else{
 
-            User::where('id', $id)->update($request->except(['_token','_method']));
+                User::where('id', $id)->update($request->except(['_token','_method','password_confirmation']));
+            }
             return redirect('/home');
 //        }
 
@@ -112,10 +116,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
-        $user = User::find($id);
-        $user->delete();
-        return redirect('/home');
+        if($request->ajax()){
+            $user = User::find($id);
+            $user->delete();
+            return "delete success";
+        } else {
+            return "delete failed";
+        }
     }
 }

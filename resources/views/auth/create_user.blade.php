@@ -50,6 +50,11 @@
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
 
                     @endforeach
+
+                </div>
+                <div class="form-group col-sm-8">
+                    <label for="country">Confirm Password:</label>
+                    <input type="password" class="form-control" name="password_confirmation"/>
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="city">Address:</label>

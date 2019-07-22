@@ -20,10 +20,6 @@ class DatatablesController extends Controller
             ->addColumn('role_name',function (User $user){
                  return $user->role->role_name;
             })
-            ->addColumn('action', function (User $user) {
-                return view('actionUser', compact('user'));
-            })
-            ->rawColumns(['action'])
             ->make(true);
     }
 }

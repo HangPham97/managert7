@@ -33,20 +33,24 @@
 
                 <div class="form-group col-sm-8">
                     <label for="email">Email:</label>
-                    <input type="text" class="form-control" name="email" value="{{old('mail', $user->mail)}}"/>
-                    @foreach ($errors->get('mail') as $message)
-
+                    <input type="text" class="form-control" name="email" value="{{$user->email}}"/>
+                    @foreach ($errors->get('email') as $message)
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
-
                     @endforeach
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="country">Password:</label>
-                    <input type="password" class="form-control" name="password" value="{{old('password', $user->password)}}"/>
+                    <input type="password" class="form-control" name="password"/>
                     @foreach ($errors->get('password') as $message)
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
                     @endforeach
                 </div>
+
+                <div class="form-group col-sm-8">
+                    <label for="country">Confirm Password:</label>
+                    <input type="password" class="form-control" name="password_confirmation"/>
+                </div>
+
                 <div class="form-group col-sm-8">
                     <label for="city">Address:</label>
                     <input placeholder="Address" type="text" class="form-control" name="address" value="{{old('address', $user->address)}}"/>
@@ -75,7 +79,7 @@
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="job_title">Role:</label>
-                    <select name="role_id" class="form-control" value="{{old('birthday', $user->birthday)}}">
+                    <select name="role_id" class="form-control" value="{{old('role_id', $user->birthday)}}">
                         @foreach($roles as $role)
                             <option value="{{$role->id}}">{{$role->role_name}}</option>
                         @endforeach
@@ -88,7 +92,7 @@
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="job_title">Active:</label>
-                    <select class="form-control"  name="is_active">
+                    <select class="form-control"  name="is_active" value="{{old('is_active', $user->is_active)}}">
                         <option value="0">Not active</option>
                         <option value="1">Active</option>
                     </select>
