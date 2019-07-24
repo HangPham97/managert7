@@ -20,12 +20,11 @@
             </div>
             <div class="box-body col-sm-9">
                 <div class="form-group col-sm-8">
-
+                    {{$errors}}
                     {{--@if(sizeof($errors) > 0)--}}
                     {{--@endif--}}
                     <label for="first_name">Name:</label>
                     <input placeholder="Name" type="text" class="form-control" name="name" value="{{old('name', $user->name)}}"/>
-                    {{$errors}}
                     @foreach ($errors->get('name') as $message)
 
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
@@ -42,7 +41,7 @@
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="country">Password:</label>
-                    <input type="password" class="form-control" name="password"/>
+                    <input type="password" class="form-control" name="password" autocomplete="new-password"/>
                     @foreach ($errors->get('password') as $message)
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
                     @endforeach
@@ -64,29 +63,40 @@
                 </div>
                 <div class="form-group col-sm-8">
                     <label>Birthday:</label>
-                        <input placeholder="Selected date" type="date" class="form-control" name="birthday" value="<?php echo e(old('birthday', date('d/m/Y'))); ?>" >
-                        @foreach ($errors->get('birthday') as $message)
+                    <input placeholder="Selected date" type="date" class="form-control" name="birthday" value="<?php echo e(old('birthday', date('d/m/Y'))); ?>" >
+                    @foreach ($errors->get('birthday') as $message)
 
-                            <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
+                        <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
 
-                        @endforeach
-                    </div>
+                    @endforeach
+                </div>
                 <div class="form-group col-sm-8">
                     <label for="job_title">Avatar:</label>
+                    {{--@if ($message = Session::get('success'))--}}
+
+                        {{--<div class="alert alert-success alert-block">--}}
+
+                            {{--<button type="button" class="close" data-dismiss="alert">×</button>--}}
+
+                            {{--<strong>{{ $message }}</strong>--}}
+
+                        {{--</div>--}}
+
+                        {{--<img src="images/{{ Session::get('image') }}">--}}
+
+                    {{--@endif--}}
                     <div class="box-body pad">
-                        <input type="file" required id="image"
-                               class="form-control file_val image-create" name="avatar"
-                               value="{{old('image')}}" accept="image/*"
-                               onchange="readURL(this);">
-                        <img id="image-url" src="../images/No_image_3x4.svg.png" alt=""
-                             width="95%" height="150px">
+                        <input type="file" id="image"
+                               class="form-control file_val image-edit" name="avatar"
+                               value="" accept="image/*" onchange="readURL(this);">
                     </div>
+                    {{--<input placeholder="Image file" type="text" class="form-control" name="avatar" value="{{old('avatar', $user->avatar)}}"/>--}}
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="job_title">Role:</label>
                     <select name="role_id" class="form-control" value="{{old('role_id', $user->role_id)}}">
                         @foreach($roles as $role)
-                            <option value="{{$role->id}}" selected=<?php echo $user->role_id == 1 ? "true" : "no" ?>>{{$role->role_name}} </option>
+                            <option value="{{$role->id}}" selected=<?php echo $user->role_id == 1 ? "true" : "no" ?>>{{$role->role_name}}</option>
                         @endforeach
                     </select>
                     @foreach ($errors->get('role_id') as $message)
@@ -101,9 +111,9 @@
                         <option value="0" selected=<?php echo $user->is_active == 1 ? "true" : "no" ?>>Not active</option>
                         <option value="1" selected=<?php echo $user->is_active == 1 ? "true" : "no" ?>>Active</option>
                     </select>
-            </div>
+                </div>
                 <div class="form-group col-sm-8" style="text-align: center">
-                    <button type="submit" class="btn btn-primary-outline">Edit user</button>
+                    <button type="submit" class="btn btn-primary-outline">Edit Profile</button>
                 </div>
             </div>
         </form>
@@ -111,15 +121,4 @@
 @stop
 
 @section('js')
-    <script>
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('image-url').src = e.target.result;
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
 @stop

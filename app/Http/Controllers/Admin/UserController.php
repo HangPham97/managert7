@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Admin\Role;
 use App\Http\Requests\UpdateUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\User;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Session;
 class UserController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -50,10 +55,10 @@ class UserController extends Controller
         ]);
         $user_check = User::where('email', $user['email'])->first();
         if (!empty($user_check)) {
-            return redirect('/user/create')->with("success", "Email này đã tồn tại", compact('user'))->withInput($request->input());
+            return redirect('admin/user/create')->with("success", "Email này đã tồn tại", compact('user'))->withInput($request->input());
         } else {
             $user->save();
-            return redirect('/home')->with('success', 'User saved!');
+            return redirect('admin/home')->with('success', 'User saved!');
         }
 
     }
@@ -78,6 +83,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
+        $user->birthday = Date::make($user->birthday)->format('m/d/Y');
+//        dd($user->birthday);
         $roles = Role::all();
         return view('auth.edit_user', compact('roles','user'));
     }
@@ -92,20 +99,27 @@ class UserController extends Controller
     public function update(UpdateUser $request, $id)
     {
 
-//        $request->validated();
-//        dd($validator);
-//        if ($validator->fails()) {
-//            return redirect()->back()
-//                ->withErrors($validator)
-//                ->withInput();
-//        } else {
+        $user = [];
+        $user['name'] = $request->get('name');
+        $user['email'] = $request->get('email');
+        $user['password'] = Hash::make($request->get('password'));
+        $user['address'] = $request->get('address');
+        $user['birthday'] = $request->get('birthday');
+        $user['role_id'] = $request->get('role_id');
+        $user['is_active'] = $request->get('is_active');
+        if ($request->hasFile('avatar')) {
+            $img = $request->file('avatar')->getClientOriginalName();
+            $request->avatar->move('images', $img);
+            $user['avatar'] = $img;
+        }
             if($request->get('password') == ""){
-                User::where('id', $id)->update($request->except(['_token','_method','password','password_confirmation']));
+                User::where('id', $id)->update($user);
             } else{
 
-                User::where('id', $id)->update($request->except(['_token','_method','password_confirmation']));
+                User::where('id', $id)->update($user);
+
             }
-            return redirect('/home');
+            return redirect('/admin/home');
 //        }
 
     }
@@ -125,5 +139,12 @@ class UserController extends Controller
         } else {
             return "delete failed";
         }
+    }
+
+    public function profile(){
+        $id = Auth::id();
+        $user = User::find($id);
+        $roles = Role::all();
+        return view('auth.edit_user',compact('user','roles'));
     }
 }

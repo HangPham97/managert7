@@ -14,7 +14,8 @@
 
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-            <div class="alert"><p style="color:red;">
+            <div class="alert">
+                <p style="color:red;">
                     {{Session('success')}}
                 </p>
             </div>
@@ -34,7 +35,7 @@
 
                 <div class="form-group col-sm-8">
                     <label for="email">Email:</label>
-                    <input placeholder="email" type="text" class="form-control" name="email" value="{{old('email')}}"/>
+                    <input placeholder="email" type="text" class="form-control" name="email"/>
                     @foreach ($errors->get('email') as $message)
 
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
@@ -69,7 +70,7 @@
                     <label>Birthday:</label>
 
                     <div class="md-form">
-                        <input placeholder="Selected date" type="date" class="form-control datepicker" name="birthday" value="{{old('birthday')}}">
+                        <input placeholder="Selected date" type="date" class="form-control" name="birthday" value="{{old('birthday')}}">
                         @foreach ($errors->get('birthday') as $message)
 
                             <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
@@ -113,7 +114,7 @@
                     @endforeach
                 </div>
                 <div class="form-group col-sm-8" style="text-align: center">
-                    <button type="submit" class="btn btn-primary-outline">Edit contact</button>
+                    <button type="submit" class="btn btn-primary-outline">Create User</button>
                 </div>
             </div>
         </form>

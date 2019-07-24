@@ -14,7 +14,11 @@
     <div class="col-md-9">
         <button onclick="location.href='user/create'" type="button" class="btn btn-primary" style="float: right;">New</button>
     </div>
-
+    <div class="alert">
+        <p style="color:red;">
+            {{Session('success')}}
+        </p>
+    </div>
 @stop
 
 @section('content')

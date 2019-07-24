@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 use Yajra\Datatables\Datatables;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\User;
 class DatatablesController extends Controller
 {

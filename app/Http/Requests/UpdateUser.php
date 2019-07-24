@@ -26,10 +26,11 @@ class UpdateUser extends FormRequest
     {
         return [
             'name' => 'required|min:2',
-            'mail' => 'unique:connection.users,email_address'.$this->user,
+            'email' => 'email|unique:users,email,'.$this->user,
             'password' => 'nullable|confirmed|min:8|max:20',
             'address' => 'required|min:4',
             'birthday' => 'date|before:today',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'role_id' => 'required',
             'is_active' => 'required'
 
