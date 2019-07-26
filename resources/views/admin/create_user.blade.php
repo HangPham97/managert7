@@ -4,13 +4,14 @@
 
 @section('content_header')
     <h1>Dashboard</h1>
+    <link href="{{ asset('css/edit.css') }}" rel="stylesheet">
 @stop
 
 @section('content')
     <div class="box box-info">
         <!-- /.box-header -->
         <!-- form start -->
-        <form class="" action="{{route('user.store')}}" method="POST">
+        <form class="" action="{{route('user.store')}}" method="POST" enctype="multipart/form-data">
 
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
@@ -26,6 +27,7 @@
                 <div class="form-group col-sm-8">
                     <label for="first_name">Name:</label>
                     <input placeholder="Name" type="text" class="form-control" name="name" value="{{old('name')}}"/>
+                    {{$errors}}
                     @foreach ($errors->get('name') as $message)
 
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
@@ -45,7 +47,7 @@
 
                 <div class="form-group col-sm-8">
                     <label for="country">Password:</label>
-                    <input placeholder="********" type="password" class="form-control" name="password" value="{{old('password')}}"/>
+                    <input type="password" class="form-control" name="password"/>
                     @foreach ($errors->get('password') as $message)
 
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
@@ -80,13 +82,20 @@
                     <!-- /.input group -->
                 </div>
                 <div class="form-group col-sm-8">
-                    <label for="job_title">Avatar:</label>
-                    <input placeholder="Image file" type="text" class="form-control" name="avatar" value="{{old('avatar')}}"/>
-                    @foreach ($errors->get('avatar') as $message)
+                    <div class="col-md-6 avatar-label">
+                        <label for="job_title">Avatar:</label>
+                        <div class="box-body pad">
+                        <input type="file" required id="image"
+                        class="form-control file_val image-create" name="avatar"
 
-                        <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
+                        onchange="readURL(this);">
+                        </div>
 
-                    @endforeach
+                    </div>
+                    <div class="col-md-6">
+                        <img id="image-url" src="/images/img_avatar3.png" alt=""
+                             width="100%" height="230px">
+                    </div>
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="job_title">Role:</label>
@@ -100,6 +109,17 @@
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
 
                     @endforeach
+                </div>
+
+                <div class="form-group col-sm-8" >
+                    <label for="job_title">Manager:</label>
+                    <select  class="form-control" name="manager_id" value="{{old('manager_id')}}">
+                        <option value="" >--</option>
+
+                        @foreach($all_user as $manager)
+                            <option value="{{$manager->id}}" >{{$manager->name}}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group col-sm-8" >
                     <label for="job_title">Active:</label>

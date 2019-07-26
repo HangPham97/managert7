@@ -32,7 +32,9 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('auth.create_user', compact('roles'));
+        $all_user = User::select(User::COL_NAME,User::COL_ID)->orderBy(User::COL_NAME)->get();
+//        dd($all_user);
+        return view('admin.create_user', compact('roles','all_user'));
     }
 
     /**
@@ -43,7 +45,6 @@ class UserController extends Controller
      */
     public function store(UpdateUser $request)
     {
-        $validator = $request->validated();
         $user = new User([
            'name'=>$request->get('name'),
             'email' => $request->get('email'),
@@ -51,9 +52,16 @@ class UserController extends Controller
             'address' => $request->get('address'),
             'birthday' => $request->get('birthday'),
             'role_id' => $request->get('role_id'),
-            'is_active' => $request->get('is_active')
+            'is_active' => $request->get('is_active'),
+            'manager_id' => $request->get('manager_id')
         ]);
-        $user_check = User::where('email', $user['email'])->first();
+        if ($request->hasFile('avatar')) {
+            $img = $request->file('avatar')->getClientOriginalName();
+            $request->avatar->move('images', $img);
+            $user['avatar'] = $img;
+            dd($img);
+        }
+        $user_check = User::where(User::COL_EMAIL, $user['email'])->first();
         if (!empty($user_check)) {
             return redirect('admin/user/create')->with("success", "Email này đã tồn tại", compact('user'))->withInput($request->input());
         } else {
@@ -83,10 +91,12 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $user->birthday = Date::make($user->birthday)->format('m/d/Y');
+
+        $all_user = User::select(User::COL_NAME,User::COL_ID)->orderBy(User::COL_NAME)->get();
+        $user->birthday = Date::make($user->birthday)->format('Y-m-d');
 //        dd($user->birthday);
         $roles = Role::all();
-        return view('auth.edit_user', compact('roles','user'));
+        return view('admin.edit_user', compact('roles','user','all_user'));
     }
 
     /**
@@ -107,20 +117,21 @@ class UserController extends Controller
         $user['birthday'] = $request->get('birthday');
         $user['role_id'] = $request->get('role_id');
         $user['is_active'] = $request->get('is_active');
-        if ($request->hasFile('avatar')) {
-            $img = $request->file('avatar')->getClientOriginalName();
-            $request->avatar->move('images', $img);
-            $user['avatar'] = $img;
-        }
-            if($request->get('password') == ""){
-                User::where('id', $id)->update($user);
-            } else{
-
-                User::where('id', $id)->update($user);
-
-            }
-            return redirect('/admin/home');
+        $user['manager_id'] = $request->get('manager_id');
+//        if ($request->hasFile('avatar')) {
+//            $img = time().'.'.$request->file('avatar')->getClientOriginalName();
+//            $request->avatar->move('images', $img);
+//            $user['avatar'] = $img;
+////            dd($img);
 //        }
+        if($request->get('password') == ""){
+            User::where('id', $id)->update($user);
+        } else{
+
+            User::where('id', $id)->update($user);
+
+        }
+            return redirect('/admin/home');
 
     }
 
@@ -144,7 +155,9 @@ class UserController extends Controller
     public function profile(){
         $id = Auth::id();
         $user = User::find($id);
+        $user->birthday = Date::make($user->birthday)->format('Y-m-d');
         $roles = Role::all();
-        return view('auth.edit_user',compact('user','roles'));
+        $all_user = User::select(User::COL_NAME,User::COL_ID)->orderBy(User::COL_NAME)->get();
+        return view('admin.profile',compact('user','roles','all_user'));
     }
 }

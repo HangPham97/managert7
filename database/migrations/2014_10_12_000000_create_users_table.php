@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->tinyInteger('role_id')->nullable();
             $table->tinyInteger('is_active')->nullable();
+            $table->double('manager_id')->nullable();
             $table->timestamps();
         });
     }

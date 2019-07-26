@@ -128,11 +128,11 @@ return [
             'icon' => 'user',
         ],
         [
-            'text' => 'Change Password',
-            'url'  => 'admin/settings',
+            'text' => 'Time Setting',
+            'url'  => 'admin/time/create',
             'icon' => 'lock',
         ],
-        [
+        /*[
             'text'    => 'Multilevel',
             'icon'    => 'share',
             'submenu' => [
@@ -169,7 +169,7 @@ return [
                     'url'  => '#',
                 ],
             ],
-        ],
+        ],*/
         'LABELS',
         [
             'text'       => 'Important',

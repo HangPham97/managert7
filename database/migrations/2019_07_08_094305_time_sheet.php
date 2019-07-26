@@ -16,8 +16,12 @@ class TimeSheet extends Migration
         Schema::create('time_sheet', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('user_id');
-            $table->time('date_of_task');
+            $table->integer('time_of_task');
             $table->string('task_id');
+            $table->date('date');
+            $table->string('trouble');
+            $table->string('next_day_plan');
+            $table->string('task_info');
             $table->timestamps();
         });
     }

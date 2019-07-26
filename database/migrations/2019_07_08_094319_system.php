@@ -15,8 +15,8 @@ class System extends Migration
     {
         Schema::create('system', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('open_time_sheet');
-            $table->time('close_time_sheet');
+            $table->time('open_time_sheet')->nullable();
+            $table->time('close_time_sheet')->nullable();
             $table->timestamps();
         });
     }

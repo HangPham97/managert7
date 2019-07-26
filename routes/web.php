@@ -18,11 +18,15 @@ Route::group(['prefix' => 'admin',  'middleware' => ['auth','admin'],'namespace'
     Route::get('/home','DatatablesController@index')->name('datatables');
     Route::resource('user','UserController');
     Route::get('/profile','UserController@profile');
+    Route::resource('time','TimeSettingController');
 });
 Auth::routes();
 
-Route::get('logout', 'LoginController@logout')->name('logout');
 
+Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('/home', function () {
-    return view('home');
+    return view('create_timesheet');
+});
+Route::group(['middleware'=>['auth','admin']],function (){
+   Route::resource('timesheet','TimesheetController');
 });

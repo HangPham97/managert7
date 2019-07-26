@@ -30,7 +30,7 @@ class UpdateUser extends FormRequest
             'password' => 'nullable|confirmed|min:8|max:20',
             'address' => 'required|min:4',
             'birthday' => 'date|before:today',
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'avatar' => 'required',
             'role_id' => 'required',
             'is_active' => 'required'
 

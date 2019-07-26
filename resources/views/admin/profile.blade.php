@@ -4,8 +4,7 @@
 
 @section('content_header')
     <h1>Dashboard</h1>
-    <style>
-    </style>
+    <link href="{{ asset('css/edit.css') }}" rel="stylesheet">
 @stop
 
 @section('content')
@@ -13,7 +12,7 @@
         <!-- /.box-header -->
         <!-- form start -->
 
-        <form class="" action="{{route('user.update',$user->id)}}" method="POST">
+        <form class="" action="{{route('user.update',$user->id)}}" method="POST" enctype="multipart/form-data">
             @method('PUT')
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="col-sm-3">
@@ -24,18 +23,12 @@
                     {{--@if(sizeof($errors) > 0)--}}
                     {{--@endif--}}
                     <label for="first_name">Name:</label>
-                    <input placeholder="Name" type="text" class="form-control" name="name" value="{{old('name', $user->name)}}"/>
-                    {{$errors}}
-                    @foreach ($errors->get('name') as $message)
-
-                        <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
-
-                    @endforeach
+                    <input placeholder="Name" type="text" class="form-control" name="name" value="{{old('name', $user->name)}}" />
                 </div>
 
                 <div class="form-group col-sm-8">
                     <label for="email">Email:</label>
-                    <input type="text" class="form-control" name="email" value="{{$user->email}}"/>
+                    <input type="text" class="form-control" name="email" value="{{$user->email}}" />
                     @foreach ($errors->get('mail') as $message)
                         <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
                     @endforeach
@@ -56,37 +49,31 @@
                 <div class="form-group col-sm-8">
                     <label for="city">Address:</label>
                     <input placeholder="Address" type="text" class="form-control" name="address" value="{{old('address', $user->address)}}"/>
-                    @foreach ($errors->get('address') as $message)
-
-                        <div class="alert alert-danger" style="margin: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
-
-                    @endforeach
                 </div>
                 <div class="form-group col-sm-8">
                     <label>Birthday:</label>
-                        <input placeholder="Selected date" type="date" class="form-control" name="birthday" value="<?php echo e(old('birthday', date('d/m/Y'))); ?>" >
-                        @foreach ($errors->get('birthday') as $message)
-
-                            <div class="alert alert-danger" style="margin-top: 5px; height: 25px; line-height: 15px; padding-top: 5px;">{{$message }}</div>
-
-                        @endforeach
-                    </div>
+                    <input  placeholder="Selected date" type="date" class="form-control" name="birthday" value="{{$user->birthday}}" >
+                </div>
                 <div class="form-group col-sm-8">
-                    <label for="job_title">Avatar:</label>
-                    <div class="box-body pad">
-                        <input type="file" required id="image"
-                               class="form-control file_val image-create" name="avatar"
-                               value="{{old('image')}}" accept="image/*"
-                               onchange="readURL(this);">
-                        <img id="image-url" src="../images/No_image_3x4.svg.png" alt=""
-                             width="95%" height="150px">
+                    <div class="col-md-6 avatar-label">
+                        <label for="job_title">Avatar:</label>
+                        <div class="box-body pad">
+                            <input type="file" id="image"
+                                   class="form-control file_val image-create" name="avatar"
+                                   onchange="readURL(this);">
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <img id="image-url" src="/images/{{$user->avatar}}" alt=""
+                             width="100%" height="230px">
                     </div>
                 </div>
                 <div class="form-group col-sm-8">
                     <label for="job_title">Role:</label>
-                    <select name="role_id" class="form-control" value="{{old('role_id', $user->role_id)}}">
+                    <select name="role_id" class="form-control">
                         @foreach($roles as $role)
-                            <option value="{{$role->id}}" selected=<?php echo $user->role_id == 1 ? "true" : "no" ?>>{{$role->role_name}} </option>
+                            <option value="{{$role->id}}" <?php echo $user->role_id == 1 ? "selected" : "" ?>>{{$role->role_name}} </option>
                         @endforeach
                     </select>
                     @foreach ($errors->get('role_id') as $message)
@@ -95,13 +82,22 @@
 
                     @endforeach
                 </div>
+                <div class="form-group col-sm-8" >
+                    <label for="job_title">Manager:</label>
+                    {{$user->manager_id}}
+                    <select  class="form-control" name="manager_id">
+                        @foreach($all_user as $manager)
+                            <option value="{{$manager->id}}" <?php echo $user->manager_id == $manager->id ? "selected" : "" ?> >{{$manager->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
                 <div class="form-group col-sm-8">
                     <label for="job_title">Active:</label>
                     <select class="form-control"  name="is_active" value="{{old('is_active', $user->is_active)}}">
-                        <option value="0" selected=<?php echo $user->is_active == 1 ? "true" : "no" ?>>Not active</option>
-                        <option value="1" selected=<?php echo $user->is_active == 1 ? "true" : "no" ?>>Active</option>
+                        <option value="0" <?php echo $user->is_active == 1 ? "selected" : "" ?>>Not active</option>
+                        <option value="1" <?php echo $user->is_active == 1 ? "selected" : "" ?>>Active</option>
                     </select>
-            </div>
+                </div>
                 <div class="form-group col-sm-8" style="text-align: center">
                     <button type="submit" class="btn btn-primary-outline">Edit user</button>
                 </div>
