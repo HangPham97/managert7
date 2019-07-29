@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class TimeSheet extends Migration
+class TimesheetDay extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class TimeSheet extends Migration
      */
     public function up()
     {
-        Schema::create('time_sheet', function (Blueprint $table) {
+        Schema::create('time_sheet_day', function (Blueprint $table) {
+
             $table->bigIncrements('id');
             $table->string('user_id');
-            $table->integer('time_of_task');
-            $table->string('task_id');
             $table->date('date');
             $table->string('trouble');
             $table->string('next_day_plan');
-            $table->string('task_info');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ class TimeSheet extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('time_sheet');
+        Schema::dropIfExists('time_sheet_day');
     }
 }

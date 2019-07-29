@@ -9,3 +9,31 @@ img {
     border-radius: 4px;
     padding: 9px;
 }
+
+.task-table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 3px;
+}
+
+td, th {
+    border: 1px solid #3c8dbc;
+    text-align: left;
+}
+th {
+    padding: 8px;
+}
+td{
+    padding: 2px;
+}
+
+tr:nth-child(even) {
+    background-color: white;
+}
+.task-input{
+    border-radius: 0px;
+}
+.delete-task{
+    margin-left: 30%;
+}
